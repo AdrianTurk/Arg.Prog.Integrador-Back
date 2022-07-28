@@ -22,6 +22,12 @@ public class Controller {
         return userService.getUsers();
     }
 
+    @GetMapping("user/get/{id}")
+    public User getUser(@PathVariable Long id){
+        return userService.findUser(id);
+    }
+
+
     @PutMapping("User/change/{id}")
     public String changeUser(@PathVariable Long id,
                              @RequestBody User userData){
