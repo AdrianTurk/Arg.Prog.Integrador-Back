@@ -1,7 +1,7 @@
 
 package com.portfolio.backend.controller;
 
-import com.portfolio.backend.interfaces.IUserService;
+import com.portfolio.backend.interfaces.IPersonService;
 import com.portfolio.backend.model.Person;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,38 +24,38 @@ public class Controller {
     private static final String USER_CHANGE_ID_PATH = "User/change/{id}";
     private static final String USER_GET_ID_PATH = "user/get/{id}";
     
-    @Autowired IUserService userService;
+    @Autowired IPersonService userService;
 
     @GetMapping(USERS_GET_PATH)
-    public List<Person> getUsers(){
-        return userService.getUsers();
+    public List<Person> getPerson(){
+        return userService.getPerson();
     }
 
     @GetMapping(USER_GET_ID_PATH)
-    public Person getUser(@PathVariable Long id){
-        return userService.findUser(id);
+    public Person getPerson(@PathVariable Long id){
+        return userService.findPerson(id);
     }
 
     @PutMapping(USER_CHANGE_ID_PATH)
-    public String changeUser(@PathVariable Long id,
+    public String changePerson(@PathVariable Long id,
                              @RequestBody Person userData){
-        Person placeHolder = userService.findUser(id);
+        Person placeHolder = userService.findPerson(id);
         placeHolder.setId(userData.getId());
         placeHolder.setName(userData.getName());
         //TODO: Terminar de implementar ALguna forma mas directa?
-        userService.newUser(placeHolder);
+        userService.newPerson(placeHolder);
         return "User NOT FULLY CHANGED - Service not full implemented";
     }
     
     @PostMapping(USER_NEW_PATH)
-    public String newUser(@RequestBody Person user){
-        userService.newUser(user);
+    public String newPerson(@RequestBody Person user){
+        userService.newPerson(user);
         return "User ADDED";
     }
     
     @DeleteMapping(USER_DEL_ID_PATH)
-    public String delUser(@PathVariable Long id){
-        userService.deleteUser(id);
+    public String delPerson(@PathVariable Long id){
+        userService.delPerson(id);
         return "User DELETED";
     }
 }
