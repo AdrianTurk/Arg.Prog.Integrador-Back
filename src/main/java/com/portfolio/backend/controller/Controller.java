@@ -15,20 +15,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Controller {
-    @Autowired IUserService userService;
+ 
+    private static final String USERS_GET_PATH = "users/get";
+    private static final String USER_DEL_ID_PATH = "user/del/{id}";
+    private static final String USER_NEW_PATH = "user/new";
+    private static final String USER_CHANGE_ID_PATH = "User/change/{id}";
+    private static final String USER_GET_ID_PATH = "user/get/{id}";
     
-    @GetMapping("users/get")
+    @Autowired IUserService userService;
+
+    @GetMapping(USERS_GET_PATH)
     public List<User> getUsers(){
         return userService.getUsers();
     }
 
-    @GetMapping("user/get/{id}")
+    @GetMapping(USER_GET_ID_PATH)
     public User getUser(@PathVariable Long id){
         return userService.findUser(id);
     }
 
-
-    @PutMapping("User/change/{id}")
+    @PutMapping(USER_CHANGE_ID_PATH)
     public String changeUser(@PathVariable Long id,
                              @RequestBody User userData){
         User placeHolder = userService.findUser(id);
@@ -39,17 +45,15 @@ public class Controller {
         return "User NOT FULLY CHANGED - Service not full implemented";
     }
     
-    @PostMapping("user/new")
+    @PostMapping(USER_NEW_PATH)
     public String newUser(@RequestBody User user){
         userService.newUser(user);
         return "User ADDED";
     }
     
-    @DeleteMapping("user/del/{id}")
+    @DeleteMapping(USER_DEL_ID_PATH)
     public String delUser(@PathVariable Long id){
         userService.deleteUser(id);
         return "User DELETED";
     }
-    
-
 }
