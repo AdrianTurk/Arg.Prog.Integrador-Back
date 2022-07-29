@@ -2,7 +2,7 @@
 package com.portfolio.backend.controller;
 
 import com.portfolio.backend.interfaces.IUserService;
-import com.portfolio.backend.model.User;
+import com.portfolio.backend.model.Person;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,19 +27,19 @@ public class Controller {
     @Autowired IUserService userService;
 
     @GetMapping(USERS_GET_PATH)
-    public List<User> getUsers(){
+    public List<Person> getUsers(){
         return userService.getUsers();
     }
 
     @GetMapping(USER_GET_ID_PATH)
-    public User getUser(@PathVariable Long id){
+    public Person getUser(@PathVariable Long id){
         return userService.findUser(id);
     }
 
     @PutMapping(USER_CHANGE_ID_PATH)
     public String changeUser(@PathVariable Long id,
-                             @RequestBody User userData){
-        User placeHolder = userService.findUser(id);
+                             @RequestBody Person userData){
+        Person placeHolder = userService.findUser(id);
         placeHolder.setId(userData.getId());
         placeHolder.setName(userData.getName());
         //TODO: Terminar de implementar ALguna forma mas directa?
@@ -48,7 +48,7 @@ public class Controller {
     }
     
     @PostMapping(USER_NEW_PATH)
-    public String newUser(@RequestBody User user){
+    public String newUser(@RequestBody Person user){
         userService.newUser(user);
         return "User ADDED";
     }

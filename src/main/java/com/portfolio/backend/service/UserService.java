@@ -3,7 +3,7 @@ package com.portfolio.backend.service;
 
 import com.portfolio.backend.dao.IUserDAO;
 import com.portfolio.backend.interfaces.IUserService;
-import com.portfolio.backend.model.User;
+import com.portfolio.backend.model.Person;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,13 @@ public class UserService implements IUserService {
     @Autowired IUserDAO userDAO;
     
     @Override
-    public List<User> getUsers() {
-        List<User> userList = userDAO.findAll();
+    public List<Person> getUsers() {
+        List<Person> userList = userDAO.findAll();
         return userList;
     }
 
     @Override
-    public void newUser(User user) {
+    public void newUser(Person user) {
         userDAO.save(user);
     }
 
@@ -29,8 +29,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findUser(Long id) {
-        return (User)userDAO.findById(id).orElse(null);
+    public Person findUser(Long id) {
+        return (Person)userDAO.findById(id).orElse(null);
     }
     
 }
