@@ -21,7 +21,7 @@ import com.portfolio.backend.security.jwt.JwtProvider;
 import com.portfolio.backend.security.model.LoginRole;
 import com.portfolio.backend.security.model.LoginUser;
 import com.portfolio.backend.security.service.RoleService;
-import com.portfolio.backend.security.service.UserService;
+import com.portfolio.backend.security.service.UserAuthService;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -46,7 +46,7 @@ public class AuthController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserService usuarioService;
+    UserAuthService usuarioService;
 
     @Autowired
     RoleService roleService;

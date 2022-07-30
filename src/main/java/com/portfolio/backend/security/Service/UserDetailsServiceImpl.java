@@ -14,11 +14,11 @@ import com.portfolio.backend.security.model.MainLoginUser;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    UserService userService;
+    UserAuthService userAuthService;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        LoginUser user = userService.getByUserName(userName).get();
+        LoginUser user = userAuthService.getByUserName(userName).get();
         return MainLoginUser.build(user);
     }
 }

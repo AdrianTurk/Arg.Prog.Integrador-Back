@@ -1,10 +1,5 @@
-package com.portfolio.backend.model;
+package com.portfolio.backend.DTO;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -14,16 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-public class UserData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @NotNull
-    @Column(unique = true)
-    private String userName;
-
+public class UserDataDTO {
     @NotNull
     @Size(min = 4, max = 50)
     private String fullName;
@@ -55,12 +41,5 @@ public class UserData {
     
     @Size(max = 100)
     private String location;
-
-    public UserData(String userName) {
-        this.userName = userName;
-    }
-
-    public UserData() {
-    }
 
 }
