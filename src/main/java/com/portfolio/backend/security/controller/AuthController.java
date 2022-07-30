@@ -1,10 +1,5 @@
 package com.portfolio.backend.security.controller;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,34 +10,43 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.portfolio.backend.DTO.Message;
 import com.portfolio.backend.security.DTO.JwtDTO;
-import com.portfolio.backend.security.DTO.NewUser;
 import com.portfolio.backend.security.DTO.UserLogin;
-import com.portfolio.backend.security.Service.RoleService;
-import com.portfolio.backend.security.Service.UserService;
-import com.portfolio.backend.security.entity.Role;
-import com.portfolio.backend.security.entity.User;
-import com.portfolio.backend.security.enums.RoleEnum;
+import com.portfolio.backend.security.DTO.NewUser;
+import com.portfolio.backend.security.enums.RoleFlag;
 import com.portfolio.backend.security.jwt.JwtProvider;
+import com.portfolio.backend.security.model.LoginRole;
+import com.portfolio.backend.security.model.LoginUser;
+import com.portfolio.backend.security.service.RoleService;
+import com.portfolio.backend.security.service.UserService;
+
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin
 public class AuthController {
-    @Autowired
-    PasswordEncoder passEncoder;
+    /**
+     *
+     */
+    private static final String MSG_ADDED = "Usuario guardado";
+    private static final String MSG_EMAIL_ALREADY_EXIST = "No se puede dar de alta, el email ya existe. ";
+    private static final String MSG_USER_ALREADY_EXIST = "No se puede dar de alta, el usuario ya existe.";
+    private static final String MSG_WRONG_FIELD = "Campos invalidos.";
 
     @Autowired
-    AuthenticationManager authManager;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserService userService;
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    UserService usuarioService;
 
     @Autowired
     RoleService roleService;
@@ -51,42 +55,35 @@ public class AuthController {
     JwtProvider jwtProvider;
 
     @PostMapping("/new")
-    public ResponseEntity<?> addUser(@Valid @RequestBody NewUser newUser, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(new Message("Datos ingresados incorrectos"), HttpStatus.BAD_REQUEST);
-        }
-        if (userService.existsByUserName(newUser.getUserName())) {
-            return new ResponseEntity<>(new Message("El usuario ya existe"), HttpStatus.BAD_REQUEST);
-        }
-        if (userService.existsByUserEmail(newUser.getUserEmail())) {
-            return new ResponseEntity<>(new Message("El email ya se encotraba registrado"), HttpStatus.BAD_REQUEST);
-        }
-        User user = new User(newUser.getUserName(),passEncoder.encode(newUser.getPassword()),
-                             newUser.getName(),  newUser.getUserEmail());
-                            Set<Role> roles = new HashSet<>();
-                            
-        roles.add(roleService.getByRole(RoleEnum.ROLE_USER).get());
-
-        if (newUser.getRoles().contains("admin")) {
-            roles.add(roleService.getByRole(RoleEnum.ROLE_ADMIN).get());
-        }
-        user.setRoles(roles);
-        userService.save(user);
-        return new ResponseEntity<>(new Message("User agregado"), HttpStatus.CREATED);
+    public ResponseEntity<?> nuevo(@Valid @RequestBody NewUser nuevoUsuario, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity(new Message(MSG_WRONG_FIELD), HttpStatus.BAD_REQUEST);
+        if(usuarioService.existsByUserName(nuevoUsuario.getUserName()))
+            return new ResponseEntity(new Message(MSG_USER_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
+        if(usuarioService.existsByEmail(nuevoUsuario.getEmail()))
+            return new ResponseEntity(new Message(MSG_EMAIL_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
+        LoginUser usuario =
+                new LoginUser(nuevoUsuario.getName(), nuevoUsuario.getUserName(), nuevoUsuario.getEmail(),
+                        passwordEncoder.encode(nuevoUsuario.getPassword()));
+        Set<LoginRole> roles = new HashSet<>();
+        roles.add(roleService.getByRoleFlag(RoleFlag.ROLE_USER).get());
+        if(nuevoUsuario.getRoles().contains("admin"))
+            roles.add(roleService.getByRoleFlag(RoleFlag.ROLE_ADMIN).get());
+        usuario.setRoles(roles);
+        usuarioService.save(usuario);
+        return new ResponseEntity(new Message(MSG_ADDED), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtDTO> login(@Valid @RequestBody UserLogin userLogin, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity(new Message(bindingResult.toString()), HttpStatus.BAD_REQUEST);
-        }
-        Authentication auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userLogin.getUserName(), userLogin.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        String jwt = jwtProvider.generateToken(auth);
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        JwtDTO jwtDTO = new JwtDTO(jwt, userDetails.getUsername(), userDetails.getAuthorities());
-        return new ResponseEntity<>(jwtDTO, HttpStatus.OK);
+    public ResponseEntity<JwtDTO> login(@Valid @RequestBody UserLogin loginUsuario, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity(new Message(MSG_WRONG_FIELD), HttpStatus.BAD_REQUEST);
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getUserName(), loginUsuario.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtProvider.generateToken(authentication);
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        JwtDTO jwtDto = new JwtDTO(jwt, userDetails.getUsername(), userDetails.getAuthorities());
+        return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
 }

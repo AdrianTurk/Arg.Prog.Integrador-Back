@@ -1,15 +1,14 @@
 package com.portfolio.backend.security.DTO;
 
-import java.util.Collection;
-
 import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 public class JwtDTO {
     private String token;
-    private String bearer="Bearer";
+    private String bearer = "Bearer";
     private String userName;
     private Collection<? extends GrantedAuthority> authorities;
-
 
     public JwtDTO(String token, String userName, Collection<? extends GrantedAuthority> authorities) {
         this.token = token;
@@ -20,7 +19,6 @@ public class JwtDTO {
     public String getToken() {
         return token;
     }
-
 
     public void setToken(String token) {
         this.token = token;
@@ -48,5 +46,5 @@ public class JwtDTO {
 
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
-    }    
+    }
 }

@@ -1,67 +1,61 @@
 package com.portfolio.backend.security.jwt;
 
-import java.util.Date;
 
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.portfolio.backend.security.entity.MainUser;
+import com.portfolio.backend.security.model.MainLoginUser;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
-
-
+import java.util.Date;
 
 @Component
 public class JwtProvider {
+
+    private static final String SIGNATURE_ERROR_MESSAGE = "Firma no autorizada";
+    private static final String ILEGAL_TOKEN_ERROR_MESSAGE = "Error de Token";
+    private static final String EXPIRED_ERROR_MESSAGE = "Token expirado";
+    private static final String UNSUPPORTED_ERROR_MESSAGE = "Token no soportado";
+    private static final String MALFORMED_ERROR_MESSAGE = "El token no esta correctamente formado";
+
     private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
-    
+
     @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration}")
     private int expiration;
 
-    public String generateToken(Authentication auth){
-
-        MainUser rootUser = (MainUser) auth.getPrincipal();
-        return Jwts.builder().setSubject(rootUser.getName())
+    public String generateToken(Authentication authentication){
+        MainLoginUser usuarioPrincipal = (MainLoginUser) authentication.getPrincipal();
+        return Jwts.builder().setSubject(usuarioPrincipal.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expiration*1000))
+                .setExpiration(new Date(new Date().getTime() + expiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
-    public String getUserNameFromToken(String token){
+    public String getNombreUsuarioFromToken(String token){
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token){
-        try{
+        try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
-        } 
-        catch(MalformedJwtException e){
-            logger.error("Error en validateToken(): " + e.getLocalizedMessage());
-        }
-        catch(ExpiredJwtException e){
-            logger.error("Error en validateToken(): " + e.getLocalizedMessage());
-        }
-        catch(IllegalArgumentException e){
-            logger.error("Error en validateToken(): " + e.getLocalizedMessage());
-        }
-        catch(SignatureException e){
-            logger.error("Error en validateToken(): " + e.getLocalizedMessage());
-        }
-        catch(UnsupportedJwtException e){
-            logger.error("Error en validateToken(): " + e.getLocalizedMessage());
+        }catch (MalformedJwtException e){
+            logger.error(MALFORMED_ERROR_MESSAGE);
+        }catch (UnsupportedJwtException e){
+            logger.error(UNSUPPORTED_ERROR_MESSAGE);
+        }catch (ExpiredJwtException e){
+            logger.error(EXPIRED_ERROR_MESSAGE);
+        }catch (IllegalArgumentException e){
+            logger.error(ILEGAL_TOKEN_ERROR_MESSAGE);
+        }catch (SignatureException e){
+            logger.error(SIGNATURE_ERROR_MESSAGE);
         }
         return false;
     }

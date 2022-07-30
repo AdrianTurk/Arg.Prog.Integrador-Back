@@ -1,57 +1,48 @@
-package com.portfolio.backend.security.entity;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+package com.portfolio.backend.security.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class MainUser implements UserDetails {
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
+public class MainLoginUser implements UserDetails {
     private String name;
     private String userName;
-    private String userEmail;
+    private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public MainUser(String name, String userName, String email, String password,
-            Collection<? extends GrantedAuthority> authorities) {
+    public MainLoginUser(String name, String userName, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.name = name;
         this.userName = userName;
-        this.userEmail = email;
+        this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static MainUser build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole().name())).collect(Collectors.toList());
-        return new MainUser(user.getName(), user.getUserName(), user.getEmail(), user.getPassword(), authorities);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return userEmail;
+    public static MainLoginUser build(LoginUser user){
+        List<GrantedAuthority> authorities =
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role
+                .getRoleFlag().name())).collect(Collectors.toList());
+        return new MainLoginUser(user.getName(), user.getUserName(), user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return this.userName;
+        return userName;
     }
 
     @Override
@@ -72,5 +63,13 @@ public class MainUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

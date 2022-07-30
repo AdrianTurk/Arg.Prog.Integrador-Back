@@ -1,14 +1,7 @@
-package com.portfolio.backend.security.controller;
+package com.portfolio.backend.DTO;
 
 public class Message {
     private String msg;
-
-    public Message() {
-    }
-
-    public Message(String msg) {
-        this.msg = msg;
-    }
 
     public String getMsg() {
         return msg;
@@ -17,5 +10,10 @@ public class Message {
     public void setMsg(String msg) {
         this.msg = msg;
     }
-   
+
+    public Message(String msg) {
+        this.msg = msg;
+    }
+
+    
 }

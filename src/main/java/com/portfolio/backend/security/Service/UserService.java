@@ -1,34 +1,35 @@
-package com.portfolio.backend.security.Service;
+package com.portfolio.backend.security.service;
 
-import java.util.Optional;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.portfolio.backend.security.DAO.IUserDAO;
-import com.portfolio.backend.security.entity.User;
+import com.portfolio.backend.security.DAO.UserDAO;
+import com.portfolio.backend.security.model.LoginUser;
+
+import java.util.Optional;
 
 @Service
 @Transactional
 public class UserService {
-    @Autowired
-    IUserDAO userDAO;
 
-    public Optional<User> getByUserName(String userName){
+    @Autowired
+    UserDAO userDAO;
+
+    public Optional<LoginUser> getByUserName(String userName){
         return userDAO.findByUserName(userName);
     }
-    
+
     public boolean existsByUserName(String userName){
         return userDAO.existsByUserName(userName);
     }
 
-    public boolean existsByUserEmail(String userEmail){
-        return userDAO.existsByUserEmail(userEmail);
+    public boolean existsByEmail(String email){
+        return userDAO.existsByEmail(email);
     }
-    
-    public void save(User newUser){
-        userDAO.save(newUser);
+
+    public void save(LoginUser user){
+        userDAO.save(user);
     }
 }

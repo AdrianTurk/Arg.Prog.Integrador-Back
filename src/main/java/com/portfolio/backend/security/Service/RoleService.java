@@ -1,27 +1,27 @@
-package com.portfolio.backend.security.Service;
-
-import java.util.Optional;
-
-import javax.transaction.Transactional;
+package com.portfolio.backend.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.portfolio.backend.security.DAO.IRoleDAO;
-import com.portfolio.backend.security.entity.Role;
-import com.portfolio.backend.security.enums.RoleEnum;
+import com.portfolio.backend.security.DAO.RoleRepository;
+import com.portfolio.backend.security.enums.RoleFlag;
+import com.portfolio.backend.security.model.LoginRole;
+
+import java.util.Optional;
 
 @Service
 @Transactional
 public class RoleService {
-    @Autowired
-    IRoleDAO roleDAO;
 
-    public Optional<Role> getByRole(RoleEnum role){
-        return roleDAO.findByRole(role);
+    @Autowired
+    RoleRepository roleRepository;
+
+    public Optional<LoginRole> getByRoleFlag(RoleFlag roleFlag){
+        return roleRepository.findByRoleFlag(roleFlag);
     }
 
-    public void save(Role role){
-        roleDAO.save(role);
+    public void save(LoginRole role){
+        roleRepository.save(role);
     }
 }

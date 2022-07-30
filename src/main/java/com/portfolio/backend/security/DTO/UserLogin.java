@@ -5,7 +5,6 @@ import javax.validation.constraints.NotBlank;
 public class UserLogin {
     @NotBlank
     private String userName;
-    
     @NotBlank
     private String password;
 
@@ -21,8 +20,7 @@ public class UserLogin {
         return password;
     }
 
-    public void setPassword(String pass) {
-        this.password = pass;
+    public void setPassword(String password) {
+        this.password = password;
     }
-    
 }

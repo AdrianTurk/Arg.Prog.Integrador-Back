@@ -1,12 +1,23 @@
 package com.portfolio.backend.security.DTO;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
 public class NewUser {
+
+    @NotBlank
     private String name;
+    
+    @NotBlank
     private String userName;
-    private String userEmail;
+    
+    @Email 
+    @NotBlank
+    private String email;
+    
+    @NotBlank
     private String password;
     private Set<String> roles = new HashSet<>();
 
@@ -26,12 +37,12 @@ public class NewUser {
         this.userName = userName;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserEmail(String email) {
-        this.userEmail = email;
+    public void setEmail( String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -48,5 +59,5 @@ public class NewUser {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
-    }    
+    }
 }
