@@ -75,13 +75,13 @@ public class AuthController {
         return new ResponseEntity<>(new Message("User agregado"), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login1")
+    @PostMapping("/login")
     public ResponseEntity<JwtDTO> login(@Valid @RequestBody UserLogin userLogin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity(new Message("campos no validos"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message(bindingResult.toString()), HttpStatus.BAD_REQUEST);
         }
         Authentication auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userLogin.getUserName(), userLogin.getPass()));
+                new UsernamePasswordAuthenticationToken(userLogin.getUserName(), userLogin.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwt = jwtProvider.generateToken(auth);

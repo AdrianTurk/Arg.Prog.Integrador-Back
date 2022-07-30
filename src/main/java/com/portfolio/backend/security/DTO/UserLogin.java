@@ -7,7 +7,7 @@ public class UserLogin {
     private String userName;
     
     @NotBlank
-    private String pass;
+    private String password;
 
     public String getUserName() {
         return userName;
@@ -17,12 +17,12 @@ public class UserLogin {
         this.userName = userName;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassword(String pass) {
+        this.password = pass;
     }
     
 }
