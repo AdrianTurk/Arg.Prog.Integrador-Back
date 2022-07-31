@@ -97,6 +97,7 @@ public class UserController {
                 destData = new UserData(userName);
             }
 
+            //TODO: Is this OK? ::
             UserData oldData = new UserData();
             modelMapper.map(destData, oldData);
             modelMapper.map(userData, destData);
