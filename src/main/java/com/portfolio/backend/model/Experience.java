@@ -19,8 +19,11 @@ public class Experience {
 
     @NotNull
     private String companyName;
+
+    private String jobPosition;
     
     private String period;
+
     
     @NotNull
     private String details;
@@ -30,8 +33,9 @@ public class Experience {
     public Experience() {
     }
 
-    public Experience(@NotNull String companyName,  @NotNull String details,String period, String recomendations) {
+    public Experience(@NotNull String companyName,String jobPosition,  @NotNull String details,String period, String recomendations) {
         this.companyName = companyName;
+        this.jobPosition = jobPosition;
         this.period = period;
         this.details = details;
         this.recomendations = recomendations;

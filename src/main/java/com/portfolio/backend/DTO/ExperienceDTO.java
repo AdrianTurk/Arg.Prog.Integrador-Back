@@ -15,6 +15,8 @@ public class ExperienceDTO {
 
     private String period;
 
+    private String jobPosition;
+
     @NotNull
     private String details;
 

@@ -46,6 +46,7 @@ public class ExperienceController {
             return new ResponseEntity(new Message("MSG_ERR_COMPANY_NAME_BLANK"), HttpStatus.BAD_REQUEST);
         }
         Experience entity = new Experience(experienceDTO.getCompanyName(),
+                experienceDTO.getJobPosition(),
                 experienceDTO.getDetails(),
                 experienceDTO.getPeriod(),
                 experienceDTO.getRecomendations());
