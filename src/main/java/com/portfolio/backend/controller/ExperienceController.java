@@ -46,7 +46,7 @@ public class ExperienceController {
         Experience entity = new Experience(experienceDTO.getCompanyName(),
                 experienceDTO.getDetails(),
                 experienceDTO.getPeriod(),
-                experienceDTO.getReferences());
+                experienceDTO.getRecomendations());
         experienceService.save(entity);
         return new ResponseEntity(new Message("MSG_ADDED"), HttpStatus.OK);
     }

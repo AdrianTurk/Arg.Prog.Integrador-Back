@@ -25,16 +25,16 @@ public class Experience {
     @NotNull
     private String details;
     
-    private String references;
+    private String recomendations;
 
     public Experience() {
     }
 
-    public Experience(@NotNull String companyName,  @NotNull String details,String period, String references) {
+    public Experience(@NotNull String companyName,  @NotNull String details,String period, String recomendations) {
         this.companyName = companyName;
         this.period = period;
         this.details = details;
-        this.references = references;
+        this.recomendations = recomendations;
     }
 
 

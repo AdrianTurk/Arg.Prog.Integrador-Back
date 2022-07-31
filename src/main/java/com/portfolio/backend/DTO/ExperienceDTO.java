@@ -18,7 +18,7 @@ public class ExperienceDTO {
     @NotNull
     private String details;
 
-    private String references;
+    private String recomendations;
 
     public ExperienceDTO(){
     }
