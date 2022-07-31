@@ -1,12 +1,12 @@
 package com.portfolio.backend.security.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.boot.CommandLineRunner;
+// import org.springframework.stereotype.Component;
 
-import com.portfolio.backend.security.enums.RoleFlag;
-import com.portfolio.backend.security.model.LoginRole;
-import com.portfolio.backend.security.service.RoleService;
+// import com.portfolio.backend.security.enums.RoleFlag;
+// import com.portfolio.backend.security.model.LoginRole;
+// import com.portfolio.backend.security.service.RoleService;
 
 
 // PARA GENERAL LOS ROLES
