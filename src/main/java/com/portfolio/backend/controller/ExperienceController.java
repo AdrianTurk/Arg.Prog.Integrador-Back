@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -74,12 +76,20 @@ public class ExperienceController {
         return new ResponseEntity(new Message("MSG_ADDED"), HttpStatus.OK);
     }
 
-    @PutMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable long id) {
         if (!experienceService.existsById(id)) {
             return new ResponseEntity(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
         }
         experienceService.delete(id);
         return new ResponseEntity(new Message("MSG_REMOVED"), HttpStatus.OK);
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<Experience> getById(@PathVariable("id") int id){
+        if(!experienceService.existsById(id))
+            return new ResponseEntity(new Message("MSG_NO_ENCOUNTRED_EXPERIENCE"), HttpStatus.NOT_FOUND);
+        
+        return new ResponseEntity(experienceService.getById(id).get(), HttpStatus.OK);
     }
 }
