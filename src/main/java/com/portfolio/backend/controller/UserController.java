@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +45,7 @@ public class UserController {
 
     ModelMapper modelMapper = new ModelMapper();
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/user/{userId}")
     public ResponseEntity<Optional<UserData>> getUserDataName(@PathVariable String userId) {
 
@@ -60,6 +62,7 @@ public class UserController {
         return new ResponseEntity<Optional<UserData>>(selectedUser, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createUserData(@Valid @RequestBody UserData userData, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -77,6 +80,7 @@ public class UserController {
         return new ResponseEntity(new Message(MSG_USER_DATA_ADDED), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{userName}")
     public ResponseEntity<?> updateUserData(@PathVariable String userName, @Valid @RequestBody UserDataDTO userData,
             BindingResult bindingResult) {
@@ -105,6 +109,7 @@ public class UserController {
         }
         return new ResponseEntity(new Message(MSG_ERR_USER_NOT_EXIST + ": " + userName), HttpStatus.BAD_REQUEST);
     }
+
     // TODO: Implement Deletions
     // @DeleteMapping("/delete/{userName}")
     // public ResponseEntity<?> delUserData(@PathVariable String userName,
