@@ -24,7 +24,6 @@ public class UserData {
     @Column(unique = true)
     private String userName;
 
-    @NotNull
     @Size(min = 4, max = 50)
     private String fullName;
 

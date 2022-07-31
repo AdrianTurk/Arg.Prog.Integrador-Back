@@ -63,7 +63,7 @@ public class AuthController {
         if(usuarioService.existsByEmail(nuevoUsuario.getEmail()))
             return new ResponseEntity(new Message(MSG_EMAIL_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
         LoginUser usuario =
-                new LoginUser(nuevoUsuario.getName(), nuevoUsuario.getUserName(), nuevoUsuario.getEmail(),
+                new LoginUser(nuevoUsuario.getUserName(), nuevoUsuario.getEmail(),
                         passwordEncoder.encode(nuevoUsuario.getPassword()));
         Set<LoginRole> roles = new HashSet<>();
         roles.add(roleService.getByRoleFlag(RoleFlag.ROLE_USER).get());

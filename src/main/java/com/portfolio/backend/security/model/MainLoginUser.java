@@ -9,25 +9,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainLoginUser implements UserDetails {
-    private String name;
+
     private String userName;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public MainLoginUser(String name, String userName, String email, String password, Collection<? extends GrantedAuthority> authorities) {
-        this.name = name;
+    public MainLoginUser(String userName, String email, String password,
+            Collection<? extends GrantedAuthority> authorities) {
+
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static MainLoginUser build(LoginUser user){
-        List<GrantedAuthority> authorities =
-                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role
+    public static MainLoginUser build(LoginUser user) {
+        List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role
                 .getRoleFlag().name())).collect(Collectors.toList());
-        return new MainLoginUser(user.getName(), user.getUserName(), user.getEmail(), user.getPassword(), authorities);
+        return new MainLoginUser(user.getUserName(), user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
@@ -65,9 +65,6 @@ public class MainLoginUser implements UserDetails {
         return true;
     }
 
-    public String getName() {
-        return name;
-    }
 
     public String getEmail() {
         return email;
