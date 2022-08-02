@@ -24,27 +24,27 @@ public class JwtProvider {
     private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
     @Value("${jwt.secret}")
-    private String secret;
+    private String SECRET;
 
     @Value("${jwt.expiration}")
-    private int expiration;
+    private int EXPIRATION;
 
     public String generateToken(Authentication authentication){
         MainLoginUser usuarioPrincipal = (MainLoginUser) authentication.getPrincipal();
         return Jwts.builder().setSubject(usuarioPrincipal.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(new Date(new Date().getTime() + EXPIRATION * 1000))
+                .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
     }
 
     public String getNombreUsuarioFromToken(String token){
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token){
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
             return true;
         }catch (MalformedJwtException e){
             logger.error(MALFORMED_ERROR_MESSAGE);
