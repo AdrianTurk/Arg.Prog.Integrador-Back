@@ -47,7 +47,7 @@ public class UserController {
 
     @PreAuthorize("permitAll()")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Optional<UserData>> getUserDataName(@PathVariable String userId) {
+    public ResponseEntity<?> getUserDataName(@PathVariable String userId) {
 
         Optional<UserData> selectedUser;
 
@@ -57,7 +57,7 @@ public class UserController {
             selectedUser = userDataService.getDataByUserName(userId);
         }
         if (selectedUser.isEmpty()) {
-            return new ResponseEntity(new Message(MSG_REQ_USER_NOT_EXIST), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message(MSG_REQ_USER_NOT_EXIST), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Optional<UserData>>(selectedUser, HttpStatus.OK);
     }
@@ -66,18 +66,18 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<?> createUserData(@Valid @RequestBody UserData userData, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity(
+            return new ResponseEntity<>(
                     new Message(MSG_ERR_INVALID_FIELD_FORMAT + bindingResult.getAllErrors().toString()),
                     HttpStatus.BAD_REQUEST);
         }
         if (!userAuthService.existsByUserName(userData.getUserName())) {
-            return new ResponseEntity(new Message(MSG_ERR_USER_NOT_EXIST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message(MSG_ERR_USER_NOT_EXIST), HttpStatus.BAD_REQUEST);
         }
         if (userDataService.existsByUserName(userData.getUserName())) {
-            return new ResponseEntity(new Message(MSG_ERR_USER_DATA_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message(MSG_ERR_USER_DATA_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
         }
         userDataService.save(userData);
-        return new ResponseEntity(new Message(MSG_USER_DATA_ADDED), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(MSG_USER_DATA_ADDED), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -85,7 +85,7 @@ public class UserController {
     public ResponseEntity<?> updateUserData(@PathVariable String userName, @Valid @RequestBody UserDataDTO userData,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity(new Message(MSG_ERR_INVALID_FIELD_FORMAT + bindingResult.getAllErrors()),
+            return new ResponseEntity<>(new Message(MSG_ERR_INVALID_FIELD_FORMAT + bindingResult.getAllErrors()),
                     HttpStatus.BAD_REQUEST);
         }
         UserData destData;
@@ -106,9 +106,9 @@ public class UserController {
             destData.setId(oldData.getId());
 
             userDataService.save(destData);
-            return new ResponseEntity(new Message(MSG_USER_DATA_UPDATED), HttpStatus.OK);
+            return new ResponseEntity<>(new Message(MSG_USER_DATA_UPDATED), HttpStatus.OK);
         }
-        return new ResponseEntity(new Message(MSG_ERR_USER_NOT_EXIST + ": " + userName), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Message(MSG_ERR_USER_NOT_EXIST + ": " + userName), HttpStatus.BAD_REQUEST);
     }
 
     // TODO: Implement Deletions

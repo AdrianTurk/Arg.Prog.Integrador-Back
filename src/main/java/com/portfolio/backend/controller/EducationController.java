@@ -41,24 +41,24 @@ public class EducationController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody EducationDTO educationDTO) {
         if (StringUtils.isBlank(educationDTO.getEntityName())) {
-            return new ResponseEntity(new Message("MSG_ERR_ENTITY_NAME_BLANK"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("MSG_ERR_ENTITY_NAME_BLANK"), HttpStatus.BAD_REQUEST);
         }
         Education entity = new Education(educationDTO.getEntityName(),
                 educationDTO.getTitle(),
                 educationDTO.getDetails());
 
         educationService.save(entity);
-        return new ResponseEntity(new Message("MSG_ADDED"), HttpStatus.OK);
+        return new ResponseEntity<>(new Message("MSG_ADDED"), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable long id, @RequestBody EducationDTO experienceDTO) {
         if (!educationService.existsById(id)) {
-            return new ResponseEntity(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
         }
 
         if (StringUtils.isBlank(experienceDTO.getEntityName())) {
-            return new ResponseEntity(new Message("MSG_ERR_ENTITY_NAME_INVALID"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("MSG_ERR_ENTITY_NAME_INVALID"), HttpStatus.BAD_REQUEST);
         }
 
         Education entry = educationService.getById(id).get();
@@ -71,23 +71,23 @@ public class EducationController {
         modelMapper.map(experienceDTO, entry);
         entry.setId(oldData.getId());
         educationService.save(entry);
-        return new ResponseEntity(new Message("MSG_ADDED"), HttpStatus.OK);
+        return new ResponseEntity<>(new Message("MSG_ADDED"), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable long id) {
         if (!educationService.existsById(id)) {
-            return new ResponseEntity(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
         }
         educationService.delete(id);
-        return new ResponseEntity(new Message("MSG_REMOVED"), HttpStatus.OK);
+        return new ResponseEntity<>(new Message("MSG_REMOVED"), HttpStatus.OK);
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<Education> getById(@PathVariable("id") int id) {
+    public ResponseEntity<?> getById(@PathVariable("id") int id) {
         if (!educationService.existsById(id))
-            return new ResponseEntity(new Message("MSG_NO_ENCOUNTRED_EXPERIENCE"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("MSG_NO_ENCOUNTRED_EXPERIENCE"), HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity(educationService.getById(id).get(), HttpStatus.OK);
+        return new ResponseEntity<>(educationService.getById(id).get(), HttpStatus.OK);
     }
 }

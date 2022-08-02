@@ -57,11 +57,11 @@ public class AuthController {
     @PostMapping("/new")
     public ResponseEntity<?> nuevo(@Valid @RequestBody NewUser nuevoUsuario, BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return new ResponseEntity(new Message(MSG_WRONG_FIELD), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message(MSG_WRONG_FIELD), HttpStatus.BAD_REQUEST);
         if(usuarioService.existsByUserName(nuevoUsuario.getUserName()))
-            return new ResponseEntity(new Message(MSG_USER_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message(MSG_USER_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
         if(usuarioService.existsByEmail(nuevoUsuario.getEmail()))
-            return new ResponseEntity(new Message(MSG_EMAIL_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message(MSG_EMAIL_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
         LoginUser usuario =
                 new LoginUser(nuevoUsuario.getUserName(), nuevoUsuario.getEmail(),
                         passwordEncoder.encode(nuevoUsuario.getPassword()));
@@ -71,19 +71,19 @@ public class AuthController {
             roles.add(roleService.getByRoleFlag(RoleFlag.ROLE_ADMIN).get());
         usuario.setRoles(roles);
         usuarioService.save(usuario);
-        return new ResponseEntity(new Message(MSG_ADDED), HttpStatus.CREATED);
+        return new ResponseEntity<>(new Message(MSG_ADDED), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtDTO> login(@Valid @RequestBody UserLogin loginUsuario, BindingResult bindingResult){
+    public ResponseEntity<?> login(@Valid @RequestBody UserLogin loginUsuario, BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return new ResponseEntity(new Message(MSG_WRONG_FIELD), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message(MSG_WRONG_FIELD), HttpStatus.BAD_REQUEST);
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getUserName(), loginUsuario.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         JwtDTO jwtDto = new JwtDTO(jwt, userDetails.getUsername(), userDetails.getAuthorities());
-        return new ResponseEntity(jwtDto, HttpStatus.OK);
+        return new ResponseEntity<>(jwtDto, HttpStatus.OK);
     }
 }

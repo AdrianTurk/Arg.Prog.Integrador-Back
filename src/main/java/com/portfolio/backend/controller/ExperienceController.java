@@ -43,7 +43,7 @@ public class ExperienceController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody ExperienceDTO experienceDTO) {
         if (StringUtils.isBlank(experienceDTO.getCompanyName())) {
-            return new ResponseEntity(new Message("MSG_ERR_COMPANY_NAME_BLANK"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("MSG_ERR_COMPANY_NAME_BLANK"), HttpStatus.BAD_REQUEST);
         }
         Experience entity = new Experience(experienceDTO.getCompanyName(),
                 experienceDTO.getJobPosition(),
@@ -51,17 +51,17 @@ public class ExperienceController {
                 experienceDTO.getPeriod(),
                 experienceDTO.getRecomendations());
         experienceService.save(entity);
-        return new ResponseEntity(new Message("MSG_ADDED"), HttpStatus.OK);
+        return new ResponseEntity<>(new Message("MSG_ADDED"), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable long id, @RequestBody ExperienceDTO experienceDTO) {
         if (!experienceService.existsById(id)) {
-            return new ResponseEntity(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
         }
 
         if (StringUtils.isBlank(experienceDTO.getCompanyName())) {
-            return new ResponseEntity(new Message("MSG_ERR_COMPANY_NAME_INVALID"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("MSG_ERR_COMPANY_NAME_INVALID"), HttpStatus.BAD_REQUEST);
         }
 
         Experience entry = experienceService.getById(id).get();
@@ -74,23 +74,23 @@ public class ExperienceController {
         modelMapper.map(experienceDTO, entry);
         entry.setId(oldData.getId());
         experienceService.save(entry);
-        return new ResponseEntity(new Message("MSG_ADDED"), HttpStatus.OK);
+        return new ResponseEntity<>(new Message("MSG_ADDED"), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable long id) {
         if (!experienceService.existsById(id)) {
-            return new ResponseEntity(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("MSG_ERR_EXP_ID_NOT_FOUND"), HttpStatus.BAD_REQUEST);
         }
         experienceService.delete(id);
-        return new ResponseEntity(new Message("MSG_REMOVED"), HttpStatus.OK);
+        return new ResponseEntity<>(new Message("MSG_REMOVED"), HttpStatus.OK);
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<Experience> getById(@PathVariable("id") int id){
+    public ResponseEntity<?> getById(@PathVariable("id") int id){
         if(!experienceService.existsById(id))
-            return new ResponseEntity(new Message("MSG_NO_ENCOUNTRED_EXPERIENCE"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("MSG_NO_ENCOUNTRED_EXPERIENCE"), HttpStatus.NOT_FOUND);
         
-        return new ResponseEntity(experienceService.getById(id).get(), HttpStatus.OK);
+        return new ResponseEntity<>(experienceService.getById(id).get(), HttpStatus.OK);
     }
 }
