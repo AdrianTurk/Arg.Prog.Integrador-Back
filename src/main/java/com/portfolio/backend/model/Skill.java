@@ -21,7 +21,7 @@ public class Skill {
 
     @NotNull
     @Column(length = 18)
-    @Size(min = 5, max = 18)
+    @Size(max = 18)
     String name;
 
     @Max(100)

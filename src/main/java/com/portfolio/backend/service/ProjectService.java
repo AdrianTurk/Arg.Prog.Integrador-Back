@@ -21,19 +21,28 @@ public class ProjectService {
         return projectDAO.findAll();
     }
 
-    public Optional<Project> getByName(String name){
+    public Optional<Project> getByName(String name) {
         return projectDAO.findByName(name);
     }
-    
-    public Optional<Project> getById(Long id){
+
+    public boolean existsByName(String name) {
+        return projectDAO.existsByName(name);
+    }
+
+    public Optional<Project> getById(Long id) {
         return projectDAO.findById(id);
     }
 
-    public void save(Project skill){
+    public boolean existsByID(Long id) {
+        return projectDAO.existsById(id);
+    }
+
+    public void save(Project skill) {
         projectDAO.save(skill);
     }
 
-    public void  delete(long id){
+    public void delete(long id) {
         projectDAO.deleteById(id);
     }
+
 }

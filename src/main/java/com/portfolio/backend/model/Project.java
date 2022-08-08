@@ -20,7 +20,7 @@ public class Project {
 
     @NotNull
     @Column(length = 30)
-    @Size(min = 10, max = 30)
+    @Size(min = 3, max = 30)
     String name;
 
     @Column(length = 300)

@@ -32,7 +32,7 @@ public class EducationController {
     @Autowired
     EducationService educationService;
 
-    @GetMapping("/list")    //TODO:PostMAPPING?
+    @GetMapping("/list") // TODO:PostMAPPING?
     public ResponseEntity<List<Education>> list() {
 
         return new ResponseEntity<>(educationService.list(), HttpStatus.OK);

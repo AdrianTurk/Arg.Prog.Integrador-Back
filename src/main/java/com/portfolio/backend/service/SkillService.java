@@ -21,19 +21,27 @@ public class SkillService {
         return skillDAO.findAll();
     }
 
-    public Optional<Skill> getByName(String name){
+    public Boolean existsByID(Long id) {
+        return skillDAO.existsById(id);
+    }
+
+    public Boolean existsByName(String name) {
+        return skillDAO.existsByName(name);
+    }
+
+    public Optional<Skill> getByName(String name) {
         return skillDAO.findByName(name);
     }
-    
-    public Optional<Skill> getById(Long id){
+
+    public Optional<Skill> getById(Long id) {
         return skillDAO.findById(id);
     }
 
-    public void save(Skill skill){
+    public void save(Skill skill) {
         skillDAO.save(skill);
     }
 
-    public void  delete(long id){
+    public void delete(long id) {
         skillDAO.deleteById(id);
     }
 }
