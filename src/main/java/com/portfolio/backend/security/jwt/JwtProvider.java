@@ -45,9 +45,10 @@ public class JwtProvider {
     public boolean validateToken(String token){
         try {
             Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+            logger.info("Token: " + token + " SECRET: " + SECRET);
             return true;
         }catch (MalformedJwtException e){
-            logger.error(MALFORMED_ERROR_MESSAGE);
+            logger.error(MALFORMED_ERROR_MESSAGE + ":" + token);
         }catch (UnsupportedJwtException e){
             logger.error(UNSUPPORTED_ERROR_MESSAGE);
         }catch (ExpiredJwtException e){

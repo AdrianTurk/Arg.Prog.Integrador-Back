@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.portfolio.backend.DTO.Message;
@@ -26,6 +27,7 @@ import com.portfolio.backend.service.UserDataService;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/user")
 public class UserController {
     /**
      *
@@ -46,7 +48,7 @@ public class UserController {
     ModelMapper modelMapper = new ModelMapper();
 
     @PreAuthorize("permitAll()")
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getUserDataName(@PathVariable String userId) {
 
         Optional<UserData> selectedUser;
