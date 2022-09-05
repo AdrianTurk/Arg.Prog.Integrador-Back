@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,8 +64,8 @@ public class ProjectController {
         return new ResponseEntity<Message>(new Message("Proyecto agregado"), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Message> delete(Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Message> delete(@PathVariable Long id) {
         if (!projectService.existsByID(id))
             return new ResponseEntity<Message>(new Message("El proyecto no existe"), HttpStatus.BAD_REQUEST);
         projectService.delete(id);
