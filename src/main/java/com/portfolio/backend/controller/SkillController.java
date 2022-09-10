@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,17 +54,17 @@ public class SkillController {
         return new ResponseEntity<Message>(new Message("Skill agregado"), HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Message> update(@RequestBody Skill skill) {
-        if (!skillService.existsByID(skill.getId()))
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Message> update(@PathVariable Long id, @RequestBody Skill skill) {
+        if (!skillService.existsByID(id))
             return new ResponseEntity<Message>(new Message("El skill no existe"), HttpStatus.BAD_REQUEST);
 
         skillService.save(skill);
         return new ResponseEntity<Message>(new Message("Skill modificado"), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> delete(Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         if (!skillService.existsByID(id))
             return new ResponseEntity<Message>(new Message("El skill no existe"), HttpStatus.BAD_REQUEST);
         skillService.delete(id);
