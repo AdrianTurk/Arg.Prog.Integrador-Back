@@ -16,7 +16,7 @@ public class Education {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @NotNull
     private String entityName;
@@ -34,5 +34,4 @@ public class Education {
         this.title = title;
         this.details = details;
     }
-
 }

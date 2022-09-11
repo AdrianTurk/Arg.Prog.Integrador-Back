@@ -16,7 +16,7 @@ import lombok.Data;
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    int id;
 
     @NotNull
     @Column(length = 30)
@@ -38,5 +38,4 @@ public class Project {
     @Column(length = 300)
     @Size(min = 0, max = 300)
     String imgLink;
-
 }

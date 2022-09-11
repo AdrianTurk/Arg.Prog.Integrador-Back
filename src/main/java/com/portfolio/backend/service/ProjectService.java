@@ -33,8 +33,8 @@ public class ProjectService {
         return projectDAO.findById(id);
     }
 
-    public boolean existsByID(Long id) {
-        return projectDAO.existsById(id);
+    public boolean existsByID(int id) {
+        return projectDAO.existsById((long) (id));
     }
 
     public void save(Project skill) {
@@ -44,5 +44,4 @@ public class ProjectService {
     public void delete(long id) {
         projectDAO.deleteById(id);
     }
-
 }

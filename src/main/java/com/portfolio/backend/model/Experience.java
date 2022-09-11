@@ -4,18 +4,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class Experience {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @NotNull
     private String companyName;
@@ -29,9 +32,6 @@ public class Experience {
     private String details;
     
     private String recomendations;
-
-    public Experience() {
-    }
 
     public Experience(@NotNull String companyName,String jobPosition,  @NotNull String details,String period, String recomendations) {
         this.companyName = companyName;

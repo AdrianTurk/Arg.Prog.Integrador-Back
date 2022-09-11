@@ -65,7 +65,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Message> delete(@PathVariable Long id) {
+    public ResponseEntity<Message> delete(@PathVariable int id) {
         if (!projectService.existsByID(id))
             return new ResponseEntity<Message>(new Message("El proyecto no existe"), HttpStatus.BAD_REQUEST);
         projectService.delete(id);

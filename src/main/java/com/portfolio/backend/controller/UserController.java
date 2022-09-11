@@ -72,10 +72,10 @@ public class UserController {
                     new Message(MSG_ERR_INVALID_FIELD_FORMAT + bindingResult.getAllErrors().toString()),
                     HttpStatus.BAD_REQUEST);
         }
-        if (!userAuthService.existsByUserName(userData.getUserName())) {
+        if (!userAuthService.existsByUserName(userData.getLoginUser().getUserName())) {
             return new ResponseEntity<>(new Message(MSG_ERR_USER_NOT_EXIST), HttpStatus.BAD_REQUEST);
         }
-        if (userDataService.existsByUserName(userData.getUserName())) {
+        if (userDataService.existsByUserName(userData.getLoginUser().getUserName())) {
             return new ResponseEntity<>(new Message(MSG_ERR_USER_DATA_ALREADY_EXIST), HttpStatus.BAD_REQUEST);
         }
         userDataService.save(userData);
@@ -96,7 +96,7 @@ public class UserController {
             if (userDataService.existsByUserName(userName)) {
                 destData = userDataService.getDataByUserName(userName).get();
             } else {
-                destData = new UserData(userName);
+                destData = new UserData();
             }
 
             //TODO: Is this OK? ::
@@ -104,7 +104,7 @@ public class UserController {
             modelMapper.map(destData, oldData);
             modelMapper.map(userData, destData);
 
-            destData.setUserName(oldData.getUserName());
+            destData.getLoginUser().setUserName(oldData.getLoginUser().getUserName());
             destData.setId(oldData.getId());
 
             userDataService.save(destData);
