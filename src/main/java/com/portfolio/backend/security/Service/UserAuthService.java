@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.portfolio.backend.security.DAO.UserDAO;
 import com.portfolio.backend.security.model.LoginUser;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,4 +33,8 @@ public class UserAuthService {
     public void save(LoginUser user){
         userDAO.save(user);
     }
+
+    public List<LoginUser> list(){
+        return userDAO.findAll();
+    } 
 }

@@ -8,6 +8,7 @@ import com.portfolio.backend.security.DAO.RoleRepository;
 import com.portfolio.backend.security.enums.RoleFlag;
 import com.portfolio.backend.security.model.LoginRole;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,4 +25,8 @@ public class RoleService {
     public void save(LoginRole role){
         roleRepository.save(role);
     }
+
+    public List<LoginRole> list(){
+        return roleRepository.findAll();
+    } 
 }
